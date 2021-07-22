@@ -267,12 +267,6 @@ namespace Chess
                     Console.WriteLine($"Attempts =  {Retry}, best result = {MaxTurns}, current result = {i}");
                 }
 
-                if (Retry > 100_000_000)
-                {
-                    MaxTurns = 0;
-                    return null;
-                }
-
                 // Запоминаем текущую позицию, чтобы можно было вернуться
                 int x = X;
                 int y = Y;
@@ -306,7 +300,7 @@ namespace Chess
                 if (i == board.X * board.Y)
                     return moves;
 
-                // Откат хода
+                // Откат хода, если закончились ходы
                 moves.RemoveAt(moves.Count - 1);
                 i--;
                 ChangePossition(board, x, y, i - 1);
