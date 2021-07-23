@@ -7,7 +7,7 @@ namespace HW_8_Sort
     class BacketSort
     {
 
-        public int[] Sort(int[] notSortedArray, int maxValue)
+        public void Sort(ref int[] notSortedArray, int maxValue)
         {
             // Создаем 10 корзин
             int step = maxValue / 10;
@@ -24,8 +24,16 @@ namespace HW_8_Sort
                 backets[index].Add(notSortedArray[i]);
             }
 
+            int currentOffset = 0;
 
-            return null;
+            for (int i = 0; i < 10; i++)
+            {
+                backets[i].Sort();
+                Array.Copy(backets[i].ToArray(), 0, notSortedArray, currentOffset, backets[i].Count);
+                currentOffset += backets[i].Count;
+            }
+
+            return;
         }
 
     }

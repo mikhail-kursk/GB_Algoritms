@@ -7,35 +7,54 @@ namespace HW_8_Sort
     {
         static void Main(string[] args)
         {
-            int arrLen = 1_000;   // Длина массива
+            int arrLen = 1_00_000_000;        // Длина массива
+            int maxvalue = 1_000_000_000; // Максимальное значение
 
-            int[] notSortedArray   = GenerateIntArray(arrLen);
-            int[] notSortedArray_2 = new int[arrLen];
-            
+            int[] notSortedArray = GenerateIntArray(arrLen, maxvalue);
+            int[] notSortedArray2 = new int[arrLen];
+            int[] notSortedArray3 = new int[arrLen];
+
             for (int i = 0; i < arrLen; i++)
             {
-                notSortedArray_2[i] = notSortedArray[i];
+                notSortedArray2[i] = notSortedArray[i];
+                notSortedArray3[i] = notSortedArray[i];
             }
 
-            Stopwatch timer_2 = new Stopwatch();
-            timer_2.Start();
-            Array.Sort(notSortedArray_2);
-            timer_2.Start();
+            Stopwatch timer1 = new Stopwatch();
 
-            Console.WriteLine(timer_2.ElapsedMilliseconds);
+            timer1.Start();
+            Array.Sort(notSortedArray);
+            timer1.Stop();
 
-            Stopwatch timer_1 = new Stopwatch();
-            timer_1.Start();
-            int[] sortedArray = QuickSort.Sort(notSortedArray);
-            timer_1.Stop();
+            Console.WriteLine($"Сортировка по умолчанию {timer1.ElapsedMilliseconds} мс");
 
-            Console.WriteLine(timer_1.ElapsedMilliseconds);
+            BacketSort backet = new BacketSort();
 
-            //BacketSort backet = new BacketSort();
-            //backet.Sort(notSortedArray, 1_000_000);
+            Stopwatch timer2 = new Stopwatch();
+
+            timer2.Start();
+            backet.Sort(ref notSortedArray2, maxvalue);
+            timer2.Start();
+
+            Console.WriteLine($"Сортировка через корзины и сортировка внутри корзины через List.Sort {timer2.ElapsedMilliseconds} мс");
+
+            Stopwatch timer3 = new Stopwatch();
+
+            timer3.Start();
+            QuickSort.Sort(ref notSortedArray3, 0, notSortedArray3.Length - 1);
+            timer3.Start();
+
+            Console.WriteLine($"Сортировка через быструю сортировку из методички {timer3.ElapsedMilliseconds} мс");
+
+
+            for (int i = 0; i < arrLen; i++)
+            {
+                if (notSortedArray[i] != notSortedArray2[i] || notSortedArray[i] != notSortedArray3[i])
+                    Console.WriteLine("Не совпадает!");
+            }
         }
 
-        static int [] GenerateIntArray (int len)
+        static int[] GenerateIntArray(int len, int maxValue)
         {
             Random randomInt = new Random();
 
@@ -43,7 +62,7 @@ namespace HW_8_Sort
 
             for (int i = 0; i < len; i++)
             {
-                array[i] = randomInt.Next(1_000_000_000);
+                array[i] = randomInt.Next(maxValue);
             }
 
             return array;
